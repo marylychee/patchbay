@@ -20,6 +20,7 @@ exports.needs = nest({
     'query': 'first',
     'search': 'first',
     'settings': 'first',
+    'shortcuts': 'first',
     'thankful': 'first',
     'thread': 'first'
   },
@@ -46,6 +47,7 @@ exports.create = (api) => {
       [ loc => loc.page === 'query', pages.query ],
       [ loc => loc.page === 'search' && loc.query, pages.search ],
       [ loc => loc.page === 'settings', pages.settings ],
+      [ loc => loc.page === 'shortcuts', pages.shortcuts ],
       [ loc => loc.page === 'thankful', pages.thankful ],
 
       [ loc => loc.blob && isBlobLink(loc.blob), pages.blob ],

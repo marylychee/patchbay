@@ -55,10 +55,18 @@ exports.create = function (api) {
 
     const { container } = api.app.html.scroller({ prepend: Header({ isPrivate, recps }), content, append: composer })
     container.classList.add('Thread')
-    container.title = msg
+    container.title = root
     api.message.async.name(root, (err, name) => {
       if (err) throw err
       container.title = name
+
+      // TODO tidy this up
+      // over-ride message.async.name OR create message.async.subject
+      onceTrue(messages, msgs => {
+        const { subject } = msgs[0].value.content
+        if (!subject) return
+        container.title = subject
+      })
     })
 
     container.scrollDownToMessage = scrollDownToMessage
@@ -74,9 +82,9 @@ exports.create = function (api) {
         // wait till we're on the right page
         if (tabs.currentPage().id !== locationId) return setTimeout(locateKey, 200)
 
-        if (!tabs.currentPage().scroll) return setTimeout(locateKey, 200)
+        if (!tabs.currentPage().keyboardScroll) return setTimeout(locateKey, 200)
 
-        tabs.currentPage().scroll('first')
+        tabs.currentPage().keyboardScroll('first')
         const msg = tabs.currentPage().querySelector(`[data-id='${id}']`)
         if (!msg) return setTimeout(locateKey, 200)
 
